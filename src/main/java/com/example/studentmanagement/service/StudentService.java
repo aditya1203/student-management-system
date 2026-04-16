@@ -3,7 +3,9 @@ package com.example.studentmanagement.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.studentmanagement.entity.Student;
 import com.example.studentmanagement.repository.StudentRepository;
@@ -23,5 +25,30 @@ public class StudentService {
 		return studentRepository.findAll();
 	}
 	
+	public Student getStudentById(Long id) {
+		return studentRepository.findById(id)
+				.orElseThrow(()-> new ResponseStatusException(
+						HttpStatus.NOT_FOUND,
+						"Student with id "+ id +" not found"
+						));
+	}
+	
+	public void deletestudent(Long id) {
+		studentRepository.deleteById(id);
+	}
+	
+	public Student updateStudent(Long id,Student student) {
+		Student existing = studentRepository.findById(id).orElse(null);
+		
+		if(existing!=null) {
+			existing.setName(student.getName());
+			existing.setEmail(student.getEmail());
+			existing.setCourse(student.getCourse());
+			
+			return studentRepository.save(existing);
+		}
+		
+		return null;
+	}
 	
 }

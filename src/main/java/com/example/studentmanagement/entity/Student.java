@@ -44,7 +44,7 @@ public class Student {
 		return name;
 	}
 	
-	public void setEmain(String email) {
+	public void setEmail(String email) {
 		this.email=email;
 	}
 	
