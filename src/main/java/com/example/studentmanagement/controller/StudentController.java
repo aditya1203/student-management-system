@@ -1,0 +1,35 @@
+package com.example.studentmanagement.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.studentmanagement.entity.Student;
+import com.example.studentmanagement.service.StudentService;
+
+@RestController
+@RequestMapping("/students")
+public class StudentController {
+	
+	//injects repository automatically
+	@Autowired
+	private StudentService studentService; 
+	
+	//Add new Student
+	@PostMapping
+	public Student addStudent(@RequestBody Student student) {
+		return studentService.saveStudent(student);
+	}
+	
+	//Fetch all student
+	@GetMapping
+	public List<Student> getAllStudent(){
+		return studentService.getAllStudent();
+	}
+	
+}
