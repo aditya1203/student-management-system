@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.studentmanagement.entity.Student;
 import com.example.studentmanagement.service.StudentService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/students")
 public class StudentController {
@@ -25,7 +27,7 @@ public class StudentController {
 	
 	//Add new Student
 	@PostMapping
-	public Student addStudent(@RequestBody Student student) {
+	public Student addStudent(@Valid @RequestBody Student student) {
 		return studentService.saveStudent(student);
 	}
 	

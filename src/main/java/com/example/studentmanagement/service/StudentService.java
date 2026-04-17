@@ -18,6 +18,14 @@ public class StudentService {
 	private StudentRepository studentRepository;
 
 	public Student saveStudent(Student student) {
+		
+		if(studentRepository.existsByEmail(student.getEmail())) {
+			throw new ResponseStatusException(
+					HttpStatus.BAD_REQUEST,
+					"Email Already Exists"
+					);
+		}
+		
 		return studentRepository.save(student);
 	}
 	
