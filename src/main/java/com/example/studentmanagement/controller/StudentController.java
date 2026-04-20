@@ -3,6 +3,7 @@ package com.example.studentmanagement.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.studentmanagement.dto.StudentRequestDTO;
+import com.example.studentmanagement.dto.StudentResponseDTO;
 import com.example.studentmanagement.entity.Student;
 import com.example.studentmanagement.service.StudentService;
 
@@ -26,14 +29,20 @@ public class StudentController {
 	private StudentService studentService; 
 	
 	//Add new Student
+//	@PostMapping
+//	public Student addStudent(@Valid @RequestBody Student student) {
+//		return studentService.saveStudent(student);
+//	}
+	
+	//Adding new with DTO
 	@PostMapping
-	public Student addStudent(@Valid @RequestBody Student student) {
-		return studentService.saveStudent(student);
+	public StudentResponseDTO addStudent(@Valid @RequestBody StudentRequestDTO dto) {
+		return studentService.saveStudent(dto);
 	}
 	
 	//Fetch all student
 	@GetMapping
-	public List<Student> getAllStudent(){
+	public List<StudentResponseDTO> getAllStudent(){
 		return studentService.getAllStudent();
 	}
 	
@@ -43,9 +52,10 @@ public class StudentController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public String deleteStudent(@PathVariable Long id) {
+	public ResponseEntity<String> deleteStudent(@PathVariable Long id) {
 		studentService.deletestudent(id);
-		return "Student Deleted Successfully";
+		//return studentService.deletestudent(id);
+		return ResponseEntity.ok("Student Deleted Successfully");
 	}
 	
 	@PutMapping("/{id}")

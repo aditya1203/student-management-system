@@ -18,10 +18,14 @@ import jakarta.servlet.http.HttpServletRequest;
 // Handles Error Globally 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+	
+	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	
 	public Map<String,Object> handleValidationException(
-			MethodArgumentNotValidException ex){
+			MethodArgumentNotValidException ex)
+	{
 		Map<String,String> errors=new HashMap<>();
 		ex.getBindingResult().getFieldErrors().forEach(error ->
           errors.put(error.getField(), error.getDefaultMessage())
@@ -49,11 +53,12 @@ public class GlobalExceptionHandler {
 		ErrorResponse error=new ErrorResponse(
 				false,
 				ex.getStatusCode().value(),
-				"EMAIL_ALREADY_EXISTS",
-				"Email Already exists",
+				ex.getReason().toUpperCase().replace(" ", "_"),
+				ex.getReason(),
 				request.getRequestURI(),
 				LocalDateTime.now()
 				);
 		return new ResponseEntity<>(error,ex.getStatusCode());
 	}
+	
 }
