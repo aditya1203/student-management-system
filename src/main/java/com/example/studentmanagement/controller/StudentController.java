@@ -26,7 +26,7 @@ public class StudentController {
 	
 	//injects repository automatically
 	@Autowired
-	private StudentService studentService; 
+	private StudentService studentService;
 	
 	//Add new Student
 //	@PostMapping
@@ -47,21 +47,28 @@ public class StudentController {
 	}
 	
 	@GetMapping("/{id}")
-	public Student getStudentByID(@PathVariable Long id) {
+	public StudentResponseDTO getStudentByID(@PathVariable Long id) {
 		return studentService.getStudentById(id);
 	}
 	
+//	@DeleteMapping("/{id}")
+//	public ResponseEntity<String> deleteStudent(@PathVariable Long id) {
+//		studentService.deletestudent(id);
+//		//return studentService.deletestudent(id);
+//		return ResponseEntity.ok("Student Deleted Successfully");
+//	}
+	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<String> deleteStudent(@PathVariable Long id) {
-		studentService.deletestudent(id);
-		//return studentService.deletestudent(id);
-		return ResponseEntity.ok("Student Deleted Successfully");
+	public String deleteStudent(@PathVariable Long id) {
+		
+		
+		return studentService.deletestudent(id);
 	}
 	
 	@PutMapping("/{id}")
-	public Student updateStudent(@PathVariable Long id, @RequestBody Student student) {
+	public StudentResponseDTO updateStudent(@PathVariable Long id, @Valid @RequestBody StudentRequestDTO dto) {
 		
-		return studentService.updateStudent(id, student);
+		return studentService.updateStudent(id, dto);
 	}
 	
 	

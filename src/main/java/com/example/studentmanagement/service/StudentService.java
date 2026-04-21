@@ -62,36 +62,71 @@ public class StudentService {
 				student.getCourse())).toList();
 	}
 	
-	public Student getStudentById(Long id) {
-		return studentRepository.findById(id)
-				.orElseThrow(()-> new ResponseStatusException(
+//	public Student getStudentById(Long id) {
+//		return studentRepository.findById(id)
+//				.orElseThrow(()-> new ResponseStatusException(
+//						HttpStatus.NOT_FOUND,
+//						"Student with id "+ id +" not found"
+//						));
+//	}
+	
+	public StudentResponseDTO getStudentById(Long id) {
+		Student student=studentRepository.findById(id)
+				.orElseThrow(()->new ResponseStatusException(
 						HttpStatus.NOT_FOUND,
-						"Student with id "+ id +" not found"
+						"Student Not found"
 						));
+		return new StudentResponseDTO(
+				student.getId(),
+				student.getName(),
+				student.getEmail(),
+				student.getCourse()
+				);
 	}
+	
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deletestudent(Long id) {
+	public String deletestudent(Long id) {
 		Student student= studentRepository.findById(id)
 				.orElseThrow(()->
 				new ResponseStatusException(
 					HttpStatus.NOT_FOUND,"Student Not found"));
 		studentRepository.delete(student);
 //		studentRepository.deleteById(id);
-		//return studentRepository.delete(student);
+		return "Student Deleted Successfully";
 	}
 	
-	public Student updateStudent(Long id,Student student) {
-		Student existing = studentRepository.findById(id).orElse(null);
-		
-		if(existing!=null) {
-			existing.setName(student.getName());
-			existing.setEmail(student.getEmail());
-			existing.setCourse(student.getCourse());
-			
-			return studentRepository.save(existing);
-		}
-		
-		return null;
+//	public Student updateStudent(Long id,Student student) {
+//		Student existing = studentRepository.findById(id).orElse(null);
+//		
+//		if(existing!=null) {
+//			existing.setName(student.getName());
+//			existing.setEmail(student.getEmail());
+//			existing.setCourse(student.getCourse());
+//			
+//			return studentRepository.save(existing);
+//		}
+//		
+//		return null;
+//	}
+	public StudentResponseDTO updateStudent(Long id, StudentRequestDTO dto) {
+
+	    Student student = studentRepository.findById(id)
+	            .orElseThrow(() -> new ResponseStatusException(
+	                    HttpStatus.NOT_FOUND,
+	                    "Student Not Found"
+	            ));
+
+	    student.setName(dto.getName());
+	    student.setEmail(dto.getEmail());
+	    student.setCourse(dto.getCourse());
+
+	    Student updatedStudent = studentRepository.save(student);
+
+	    return new StudentResponseDTO(
+	            updatedStudent.getId(),
+	            updatedStudent.getName(),
+	            updatedStudent.getEmail(),
+	            updatedStudent.getCourse()
+	    );
 	}
-	
 }
