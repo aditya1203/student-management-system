@@ -16,11 +16,13 @@ public class SecurityConfig {
 	
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception {
-		
+		System.out.println("Custom SecurityConfig Loaded");
 		http
 		.csrf(csrf-> csrf.disable())
-		.authorizeHttpRequests(auth->auth.requestMatchers("/auth/**").permitAll().anyRequest().authenticated())
-		.httpBasic(Customizer.withDefaults());
+		.authorizeHttpRequests(auth->auth
+				.requestMatchers("/auth/**").permitAll()
+				.anyRequest().authenticated())
+		.httpBasic(httpBasic ->httpBasic.disable());
 		
 		return http.build();
 	}
@@ -29,5 +31,6 @@ public class SecurityConfig {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+	
 	
 }
